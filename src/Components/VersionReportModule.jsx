@@ -1,36 +1,79 @@
 import { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+
+import { alertError, alertSuccess } from "../helper/toast";
+import RegionElement from "./RegionElement";
+
 import classes from "./VersionReport.module.css";
 
 const VersionRepoertModule = () => {
-  const [state, setState] = useState({ version: "", level: "Region" });
+  // state indicates selected fields only
+  const [state, setState] = useState({ version: "", level: "Region",region:"" });
+  // version , levels and ADB never changes 
   const [versions, setVersions] = useState([]);
   const [levels] = useState([
-    "Regional",
+    "Region",
     "Governrate",
     "Markaz",
     "Municipality",
     "Shiakha",
   ]);
-  const [ADB, setADB] = useState();
+  const Navigate = useNavigate();
+  const [ADB, setADB] = useState({
+    Region: [],
+    Governrate: [],
+    Markaz: [],
+    Municipality: [],
+    Shiakha: [],
+  });
+
+  // read data from backend
   useEffect(() => {
     // call backend
     const regesteredVersions = ["version1", "version2", "version3"];
-    const readADB = {reg:[],gvr:[],mrk:[],mun:[],shk:[]};
+    const readADB = {
+      Region: ["1", "2", "3", "4", "5", "6"],
+      Governrate: ["Cairo", "Giza", "Alex", "Gharbia", "Qalubia"],
+      Markaz: ["zefta", "santa"],
+      Municipality: [],
+      Shiakha: [],
+    };
     setVersions(regesteredVersions);
     setADB(readADB);
+    console.log();
   }, []);
+
+  // filter small with large
+  useEffect(()=>{
+    // const {Region,Governrate,Markaz,Municipality,Shiakha}=state
+    // Filter fields to those only exist
+  },[state,ADB])
 
   const handleChange = useCallback((e) => {
     const { value, name } = e.target;
     setState((u) => ({ ...u, [name]: value }));
   }, []);
 
+  // submit
+  const handleVersionReport = useCallback(() => {
+    console.log(state);
+    if (state.version==="") {
+      alertError("Please Choose a version")
+    }else{
+      // call backend 
+      alertSuccess(`report is created on version ${state.version}`)
+      Navigate("/report")
+    }
+  }, [state,Navigate]);
+
   return (
     <>
+    <ToastContainer/>
       <div className={classes.container}>
         <div className={classes.mainTitle}>Create Versioning report</div>
         <div className={classes.row}>
-          <label className="label-dark" htmlFor="version">
+          <label className={classes.labelText} htmlFor="version">
             Select Version
           </label>
           <select
@@ -40,13 +83,16 @@ const VersionRepoertModule = () => {
             className={classes.selectVersion}
             value={state.version}
           >
-            {versions.length === 0 ? (
-              <option>no Versions is defined</option>
-            ) : (
-              versions.map((ver, index) => <option key={index} value={ver}>{ver}</option>)
-            )}
+            <option value={""} hidden disabled>
+              Select Version
+            </option>
+            {versions?.map((ver, index) => (
+              <option key={index} value={ver}>
+                {ver}
+              </option>
+            ))}
           </select>
-          <label className="label-dark" htmlFor="level">
+          <label className={classes.labelText} htmlFor="level">
             Search Level
           </label>
           <select
@@ -57,28 +103,32 @@ const VersionRepoertModule = () => {
             value={state.level}
           >
             {levels.map((lvl, index) => (
-              <option key={index} value={lvl}>{lvl}</option>
+              <option key={index} value={lvl}>
+                {lvl}
+              </option>
             ))}
           </select>
-            {/* {
-                for i = 1:state.level.length
 
-                end
-            } */}
-          <label className="label-dark" htmlFor="reg">
-            Region
-          </label>
-          <select
-            onChange={handleChange}
-            name="level"
-            id="level"
-            className={classes.selectVersion}
-            value={state.level}
+          {levels
+            .slice(0, levels.indexOf(state.level) + 1)
+            .map((level, index) => {
+              return (
+                <RegionElement
+                  key={index}
+                  labelText={level}
+                  selectionName={level}
+                  selectedOption={state[level]||ADB[level][0]}
+                  options={ADB[level]}
+                  handleChange={handleChange}
+                />
+              );
+            })}
+          <button
+            onClick={handleVersionReport}
+            className={classes.submitButton}
           >
-            {levels.map((lvl, index) => (
-              <option key={index}>{lvl}</option>
-            ))}
-          </select>
+            Create Version report
+          </button>
         </div>
       </div>
     </>

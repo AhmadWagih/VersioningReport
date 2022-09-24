@@ -2,8 +2,9 @@ import { Route, Routes } from "react-router-dom";
 
 import Login from "./Components/Login";
 import VersionRepoertModule from "./Components/VersionReportModule";
-
+import 'react-toastify/dist/ReactToastify.css';
 import "./App.css";
+
 function App() {
   return (
     <>

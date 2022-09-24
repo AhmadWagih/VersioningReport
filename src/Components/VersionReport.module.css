@@ -10,7 +10,7 @@
 }
 
 .mainTitle{
-    font-size: x-large;
+    font-size: xx-large;
     font-weight: 900;
     margin: 10px 0;
     font-family: "Google Sans";
@@ -20,9 +20,32 @@
     font-weight: bold;
     font-size: large;
 }
+.labelText{
+    font-family: "Google Sans";
+    margin: 5px;
+}
 .selectVersion{
     width: 50%;
     margin: 0px auto;
+    display: block;
+    border-radius: 5px;
+}
+.submitButton {
+    background-color: #393e43;
+    color: white;
+    border-radius: 5px;
+    display: block;
+    margin: 15px auto 5px auto;
+    padding: 5px 10px;
+  }
+.regionDev{
+    width: 30%;
+    margin: 5px;
+    display: inline-block;
+}
+.selectRegion{
+    width: 80%;
+    margin: 3px 0px 3px auto;
     display: block;
     border-radius: 5px;
 }
