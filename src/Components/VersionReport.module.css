@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+.container{
+    width: 50%;
+    padding: 20px;
+    left:auto;
+    margin: 20px auto;
+    background-color: rgba(0,0,0,0.7);
+    color: white;
+    border-radius: 10px;
+}
+
+.mainTitle{
+    font-size: x-large;
+    font-weight: 900;
+    margin: 10px 0;
+    font-family: "Google Sans";
+}
+.row{
+    margin: 10px;
+    font-weight: bold;
+    font-size: large;
+}
+.selectVersion{
+    width: 50%;
+    margin: 0px auto;
+    display: block;
+    border-radius: 5px;
+}
