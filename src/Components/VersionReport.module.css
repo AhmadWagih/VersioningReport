@@ -35,7 +35,7 @@
     color: white;
     border-radius: 5px;
     display: block;
-    margin: 15px auto 5px auto;
+    margin: 35px auto 5px auto;
     padding: 5px 10px;
   }
 .regionDev{
@@ -48,4 +48,9 @@
     margin: 3px 0px 3px auto;
     display: block;
     border-radius: 5px;
+}
+.radioGroup{
+    display: block !important;
+    padding-left: 15%;
+    padding-right: 0px;
 }

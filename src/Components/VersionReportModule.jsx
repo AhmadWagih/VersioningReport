@@ -9,7 +9,7 @@ import classes from "./VersionReport.module.css";
 
 const VersionRepoertModule = () => {
   // state indicates selected fields only
-  const [state, setState] = useState({ version: "", level: "Region",region:"" });
+  const [state, setState] = useState({ version: "", level: "Region",region:"1" });
   // version , levels and ADB never changes 
   const [versions, setVersions] = useState([]);
   const [levels] = useState([
@@ -53,6 +53,7 @@ const VersionRepoertModule = () => {
   const handleChange = useCallback((e) => {
     const { value, name } = e.target;
     setState((u) => ({ ...u, [name]: value }));
+    console.log(value,name);
   }, []);
 
   // submit
@@ -93,22 +94,16 @@ const VersionRepoertModule = () => {
             ))}
           </select>
           <label className={classes.labelText} htmlFor="level">
-            Search Level
+            Details Level
           </label>
-          <select
-            onChange={handleChange}
-            name="level"
-            id="level"
-            className={classes.selectVersion}
-            value={state.level}
-          >
-            {levels.map((lvl, index) => (
-              <option key={index} value={lvl}>
-                {lvl}
-              </option>
+          <div className={`${classes.radioGroup} btn-group`} role="group" aria-label="Basic radio toggle button group">
+          {levels.map((lvl, index) => (
+            <>
+              <input key={index} type="radio" className="btn-check" name="level" id={lvl} autoComplete="off" value={lvl} onChange={handleChange} checked={lvl===state.level?true:false}/>
+              <label className="btn btn-outline-light" htmlFor={lvl} style={{height:40}}><b>{lvl}</b></label>
+            </>
             ))}
-          </select>
-
+          </div>
           {levels
             .slice(0, levels.indexOf(state.level) + 1)
             .map((level, index) => {
