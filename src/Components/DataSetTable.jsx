@@ -21,7 +21,6 @@ const DataSetTable = ({ index, dataSet, outliersOnly }) => {
             <tbody>
               {featureClass.diff.map((object, i) => (
                 <ObjectTable
-                  key={i}
                   index={i}
                   object={object}
                   outliersOnly={outliersOnly}

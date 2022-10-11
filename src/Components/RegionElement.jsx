@@ -2,7 +2,7 @@ import classes from "./VersionReport.module.css";
 
 const RegionElement = ({ labelText,selectionName, options,selectedOption, handleChange }) => {
   return (
-    <div className={classes.regionDev}>
+    <div key ={selectionName} className={classes.regionDev}>
       <label className={classes.labelText} htmlFor={selectionName}>
         {labelText}
       </label>
