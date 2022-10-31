@@ -1,24 +1,16 @@
 import React from "react";
 import { useRef, useState, useEffect } from "react";
-// import { useNavigate } from "react-router-dom";
-// import { LoginUser } from "../../APIs/auth";
-// import AuthContext from '../context/AuthProvider';
-// // import axios from 'axios';
-// // const LOGIN_URL ='/auth';
+import { LoginUser } from "../APIs/auth";
 import { ToastContainer } from "react-toastify";
 
-// import "../../styles/Login.css";
-import classes from "./Login.modules.css";
+import classes from "./Login.module.css";
 
-const Login = () => {
-  // const {setAuth} = useContext(AuthContext)
+const Login = ({setToken}) => {
   const userRef = useRef();
   const errRef = useRef();
   const [user, setUser] = useState("");
   const [pwd, setPwd] = useState("");
   const [errMsg, setErrMsg] = useState("");
-  // const Navigate = useNavigate();
-  // const [success, setSuccess] = useState(false);
   useEffect(() => {
     userRef.current.focus();
   }, []);
@@ -27,19 +19,15 @@ const Login = () => {
     setErrMsg("");
   }, [user, pwd]);
 
-  /*const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const response = await LoginUser(user, pwd);
-    console.log(JSON.stringify(response?.data));
     if (response) {
-      const accessToken = response?.data?.accessToken;
-      const roles = response?.data?.roles;
-      //  setAuth(user,pwd,roles,accessToken)
-      setUser("");
-      setPwd("");
-      Navigate("/home");
+      const accessToken = response;
+      setToken(accessToken);
+      window.location = window.location.href;
     }
-  };*/
+  };
 
   return (
     <>
@@ -60,11 +48,11 @@ const Login = () => {
                 <div className="formstyle  ">
                   <div className="logo mb-3">
                     <div className="col-md-12 text-center">
-                      <h1 className={classes.headerform}>Login</h1>
+                      <h1 className={classes.mainTitle}>Login</h1>
                     </div>
                   </div>
 
-                  <form /*onSubmit={handleSubmit}*/>
+                  <form onSubmit={handleSubmit}>
                     <div className={classes.formGroup}>
                       <label htmlFor="username" className="Uform">
                         Username:

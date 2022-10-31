@@ -1,10 +1,10 @@
 
 const ObjectTable = ({ index, object, outliersOnly }) => {
 
-  return outliersOnly && object.status ? (
+  return outliersOnly && !object.status ? (
     <></>
   ) : (
-    <tr key={index} className={object.status?"table-light":"table-danger"}>
+    <tr key={object.objectId} className={object.status?"table-danger":"table-light"}>
       <td className="p-2">{index + 1}</td>
       <td>{object.objectId}</td>
       <td>{object.operation}</td>

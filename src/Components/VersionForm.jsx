@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
@@ -9,7 +9,7 @@ import { getADB } from "../APIs/ADB";
 
 import classes from "./VersionReport.module.css";
 
-const VersionForm = ({ setVersionReport,setFormState,formState }) => {
+const VersionForm = ({ setVersionReport, setFormState, formState,setPrevPath }) => {
   // version , levels and ADB never changes
   const [versions, setVersions] = useState();
   const [levels] = useState([
@@ -36,15 +36,19 @@ const VersionForm = ({ setVersionReport,setFormState,formState }) => {
   });
 
   const Navigate = useNavigate();
-
   // read data from backend
   useEffect(() => {
     (async () => {
       const regesteredVersions = await getVersions();
-      const readADB = await getADB();
       setVersions(regesteredVersions);
+      // get ADB from database (regions governs and marakez )
+      let readADB = await getADB();
       setADB(readADB);
-      setState((state) => ({ ...state, Region: readADB[0].name }));
+      filterADB("Region", readADB);
+      // get ADB from the featureclasses (all details)
+      state.Region = readADB[0].name;
+      readADB = await getADB(true);
+      setADB(readADB);
       filterADB("Region", readADB);
     })();
   }, []);
@@ -53,7 +57,9 @@ const VersionForm = ({ setVersionReport,setFormState,formState }) => {
   const filterADB = useCallback(
     (level, readADB = ADB) => {
       const Region =
-        readADB?.filter((reg) => reg.name === state.Region)[0] || readADB[0];
+        readADB?.filter((reg) => reg.name === state.Region)[0] ||
+        readADB[0] ||
+        null;
       const Govern =
         Region?.governs?.filter((gov) => gov.name === state.Governrate)[0] ||
         Region.governs[0];
@@ -62,14 +68,14 @@ const VersionForm = ({ setVersionReport,setFormState,formState }) => {
         Govern?.marakez[0];
       const Mun =
         Markaz?.muns?.filter((gov) => gov.name === state.Municipality)[0] ||
-        Markaz?.muns[0];
+        Markaz?.muns?Markaz.muns[0]:"";
 
       const filteredADB = {
         Region: readADB.map((region) => region.name),
         Governrate: Region.governs?.map((gov) => gov.name),
         Markaz: Govern.marakez?.map((gov) => gov.name),
         Municipality: Markaz?.muns?.map((gov) => gov.name),
-        Shiakha: Mun?.shiakhas.map((gov) => gov.name),
+        Shiakha: Mun?.shiakhas?.map((gov) => gov.name),
       };
       let newState = {};
       switch (level) {
@@ -115,32 +121,33 @@ const VersionForm = ({ setVersionReport,setFormState,formState }) => {
   const handleVersionReport = useCallback(() => {
     if (state.version === "") {
       alertError("Please Choose a version");
+      console.log(state);
     } else if (state[state.level] === "") {
       alertError(`Please Choose ${state.level} or change the Details level`);
     } else {
       (async () => {
-        setState(state=>({...state,loading:true}))
-        let report = await createVersionReport(
+        setState((state) => ({ ...state, loading: true }));
+        let response = await createVersionReport(
           state.version,
           levels.indexOf(state.level),
           state[state.level]
         );
-        console.log(
-          state.version,
-          levels.indexOf(state.level),
-          state[state.level]
-        );
-        if (report) {
-          setVersionReport({ version: state.version, report });
-          setFormState({...state,loading:false})
+        if (response.success) {
+          setVersionReport({
+            version: state.version,
+            reportId: response.reportId,
+            report: response.report,
+          });
+          setFormState({ ...state, loading: false });
           alertSuccess(`report is created for ${state.version}`);
+          setPrevPath("/")
           Navigate("/report");
-        }else{
-          setState(state=>({...state,loading:false}))
+        } else {
+          setState((state) => ({ ...state, loading: false }));
         }
       })();
     }
-  }, [state,Navigate ,levels,setVersionReport,]);
+  }, [state, Navigate, levels, setVersionReport, setFormState,setPrevPath]);
 
   return (
     <>
@@ -176,9 +183,8 @@ const VersionForm = ({ setVersionReport,setFormState,formState }) => {
             aria-label="Basic radio toggle button group"
           >
             {levels.map((lvl, index) => (
-              <>
+              <Fragment key={index}>
                 <input
-                  key={index}
                   type="radio"
                   className="btn-check"
                   name="level"
@@ -195,7 +201,7 @@ const VersionForm = ({ setVersionReport,setFormState,formState }) => {
                 >
                   <b>{lvl}</b>
                 </label>
-              </>
+              </Fragment>
             ))}
           </div>
           {levels.slice(0, levels.indexOf(state.level) + 1).map((level) => {
@@ -213,12 +219,20 @@ const VersionForm = ({ setVersionReport,setFormState,formState }) => {
           <button
             onClick={handleVersionReport}
             className={classes.submitButton}
+            disabled={state.loading}
           >
             Create Version report
-            {state.loading?<div className="spinner-div d-inline-block">
-              <div className="spinner-border" style={{height:"20px",width:"20px",marginLeft:"15px"}} role="status">
+            {state.loading ? (
+              <div className="spinner-div d-inline-block">
+                <div
+                  className="spinner-border"
+                  style={{ height: "20px", width: "20px", marginLeft: "15px" }}
+                  role="status"
+                ></div>
               </div>
-            </div>:<></>}
+            ) : (
+              <></>
+            )}
           </button>
         </div>
       </div>

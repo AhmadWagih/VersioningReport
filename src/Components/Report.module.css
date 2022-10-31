@@ -1,49 +1,62 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
-.container{
-    width: 90%;
-    padding: 20px;
-    margin: 10px auto;
-    background-color: rgba(0,0,0,0.7);
-    color: white;
-    border-radius: 10px;
-    max-height: 95vh;
-    overflow-y: auto;
+@import url("https://fonts.googleapis.com/css2?family=Nunito&display=swap");
+.container {
+  width: 90%;
+  padding: 20px;
+  margin: 10px auto;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  border-radius: 10px;
+  max-height: 95vh;
+  overflow-y: auto;
 }
-.mainTitle{
-    font-size: xx-large;
-    font-weight: 900;
-    margin: 10px 0px 0px 0px;
-    font-family: "Google Sans";
+.mainTitle {
+  font-family: "Google Sans";
+  font-size: xx-large;
+  font-weight: 900;
+  margin: 10px 0px 0px 0px;
 }
-.secTitle{
-    font-family: "Google Sans";
-    font-size: x-large;
-    font-weight: 700;
-    margin: 5px;
+.secTitle {
+  font-family: "Google Sans";
+  font-size: x-large;
+  font-weight: 700;
+  margin: 5px;
 }
-.fcTitle{
-    font-family: "Google Sans";
-    font-size: large;
-    font-weight: 600;
-    margin: 5px 20px;
+.fcTitle {
+  font-family: "Google Sans";
+  font-size: large;
+  font-weight: 600;
+  margin: 5px 20px;
 }
 
 /* width */
 ::-webkit-scrollbar {
-    width: 10px;
-  }
-  
-  /* Track */
-  ::-webkit-scrollbar-track {
-    background: #f1f1f1;
-  }
-  
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: #888;
-  }
-  
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
-    background: #555;
-  }
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+.buttonContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: 35px auto 5px auto;
+}
+.submitButton {
+  background-color: #393e43;
+  color: white;
+  border-radius: 5px;
+  margin: 0 2%;
+  padding: 5px 10px;
+}
